@@ -1,0 +1,38 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Bold;\f1\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red25\green28\blue31;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c14510\c16078;\cssrgb\c100000\c100000\c100000;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs34 \AppleTypeServices\AppleTypeServicesF65539 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Update Order Total :-
+\f1\b0 \AppleTypeServices\AppleTypeServicesF65539 \
+\'a0\
+trigger OrderTotalTrigger on HandsMen_Order__c (before insert, before update) \{\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \'a0 \'a0 Set<Id> productIds = new Set<Id>();\cb1 \
+\cb3 \'a0\cb1 \
+\cb3 \'a0 \'a0 for (HandsMen_Order__c order : Trigger.new) \{ s\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 if (order.HandsMen_Product__c != null) \{\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 productIds.add(order.HandsMen_Product__c);\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \}\cb1 \
+\cb3 \'a0 \'a0 \}\cb1 \
+\cb3 \'a0\cb1 \
+\cb3 \'a0 \'a0 Map<Id, HandsMen_Product__c> productMap = new Map<Id, HandsMen_Product__c>(\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 [SELECT Id, Price__c FROM HandsMen_Product__c WHERE Id IN :productIds]\cb1 \
+\cb3 \'a0 \'a0 );\cb1 \
+\cb3 \'a0\cb1 \
+\cb3 \'a0 \'a0 for (HandsMen_Order__c order : Trigger.new) \{\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 if (order.HandsMen_Product__c != null && productMap.containsKey(order.HandsMen_Product__c)) \{\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 HandsMen_Product__c product = productMap.get(order.HandsMen_Product__c);\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if (order.Quantity__c != null) \{\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 order.Total_Amount__c = order.Quantity__c * product.Price__c;\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cb1 \
+\cb3 \'a0 \'a0 \'a0 \'a0 \}\cb1 \
+\cb3 \'a0 \'a0 \}\cb1 \
+\cb3 \}\cb1 \
+\cb3 \'a0\
+\'a0\
+}
